@@ -118,6 +118,13 @@ as char) as 'result';
     name=bob
 ```
 
+## Сборка
+
+```
+git clone --recurse-submodules https://github.com/ikonopistsev/capjs.git
+run ./build.sh
+```
+
 ## Установка
 
 ```

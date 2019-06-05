@@ -22,12 +22,12 @@ endmacro(use_cxx11)
 use_cxx11()
 
 set(sources
-    src/json_array.cpp
-    src/json_object.cpp
-    src/json_date.cpp
-    src/json_time.cpp
-    src/json_write.cpp
-    src/mkkv.cpp
+    ../src/json_array.cpp
+    ../src/json_object.cpp
+    ../src/json_date.cpp
+    ../src/json_time.cpp
+    ../src/json_write.cpp
+    ../src/mkkv.cpp
 )
 
 add_library(capjs SHARED ${sources})

@@ -1,10 +1,13 @@
 cmake_minimum_required(VERSION 3.0.2)
 
+file(READ "../version.txt" FILE_VER)
+file(READ "../revision.txt" FILE_REV)
+
 # менять верисю пакета тут
-project(capjs VERSION 1.0.0 LANGUAGES CXX)
+project(capjs VERSION ${FILE_VER} LANGUAGES CXX)
 # версию сборки тут
 # дополнительная версия пакета
-set(CUSTOM_BUILD_VERSION 1)
+set(CUSTOM_BUILD_VERSION ${FILE_REV})
 
 include_directories("/usr/include/mysql")
 include_directories("../btdef")

@@ -14,7 +14,7 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
             return 1;
         }
 
-        initid->max_length= 25;
+        initid->max_length= 24;
         initid->maybe_null = 1;
         initid->const_item = 0;
 
@@ -32,7 +32,7 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
     return 1;
 }
 
-extern "C" char* jsd(UDF_INIT* /* initid */, UDF_ARGS *args,
+extern "C" char* jsd(UDF_INIT* initid, UDF_ARGS *args,
         char* result, unsigned long* length,
         char* /* is_null */, char* error)
 {

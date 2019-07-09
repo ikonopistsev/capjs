@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 
-file(READ "../version.txt" FILE_VER)
+file(READ "version.txt" FILE_VER)
 
 # менять верисю пакета тут
 project(capjs VERSION ${FILE_VER} LANGUAGES CXX)

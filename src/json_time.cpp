@@ -1,4 +1,4 @@
-#include "btdef.hpp"
+#include "btdef/date.hpp"
 
 #include <mysql.h>
 
@@ -48,7 +48,7 @@ extern "C" long long jst(UDF_INIT* /* initid */,
         auto v = args->args[0];
         if (v)
         {
-            auto d = utility::date::parse(v);
+            auto d = btdef::date::parse(v);
             return static_cast<long long>(d.time());
         }
     }

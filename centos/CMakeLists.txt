@@ -10,7 +10,7 @@ project(capjs VERSION ${FILE_VER} LANGUAGES CXX)
 set(CUSTOM_BUILD_VERSION ${FILE_REV})
 
 include_directories("/usr/include/mysql")
-include_directories("../btdef")
+include_directories("../")
 
 macro(use_cxx11)
   if (CMAKE_VERSION VERSION_LESS "3.1")

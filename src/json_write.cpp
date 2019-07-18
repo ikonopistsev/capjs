@@ -1,5 +1,9 @@
 #include "json_write.hpp"
 
+#include "btdef/text.hpp"
+#include "btdef/date.hpp"
+#include "btdef/ref.hpp"
+
 namespace captor {
 
 static inline void write_null(string_type& result)
@@ -11,7 +15,7 @@ static inline void write_null(string_type& result)
 // конвертация строк в вещественное число
 static inline void write_as_real(string_type& result, const char* val)
 {
-    result += utility::to_text(std::atof(val));
+    result += btdef::to_text(std::atof(val));
 }
 
 // конвертация строк в вещественное число через std
@@ -70,7 +74,7 @@ void write_escape(string_type& result, const char* val, std::size_t vs)
                     result += 'u';
                     result += '0';
                     result += '0';
-                    result += utility::to_hex(c);
+                    result += ref::to_hex(c);
                 } else {
                     result += c;
                 }
@@ -125,13 +129,13 @@ void write_value(string_type& result, char t, const char* val, std::size_t vs)
 // стандартный вывод вещественного числа
 static inline void write(string_type& result, double val)
 {
-    result += utility::to_text(val);
+    result += btdef::to_text(val);
 }
 
 // стандартный вывод числа с точностью
 static inline void write(string_type& result, double val, std::size_t exp)
 {
-    result += utility::to_text(val, exp);
+    result += btdef::to_text(val, exp);
 }
 
 // стандартный вывод числа через std
@@ -162,14 +166,14 @@ void write_value(string_type& result, char d, const double* val)
 // стандартный вывод целого числа
 static inline void write(string_type& result, long long val)
 {
-    result += utility::to_text(static_cast<std::int64_t>(val));
+    result += btdef::to_text(static_cast<std::int64_t>(val));
 }
 
 static inline void write_time(string_type& result, long long val)
 {
-    auto t = static_cast<utility::date::value_t>(val);
+    auto t = static_cast<btdef::date::value_t>(val);
     result += '\"';
-    result += utility::date(t).json_text();
+    result += btdef::date(t).json_text();
     result += '\"';
 }
 

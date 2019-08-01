@@ -16,7 +16,7 @@ public:
     void end();
 
     void add(const char* key, std::size_t ks,
-        const char* val, std::size_t vs);
+             const char* val, std::size_t vs);
 
     void add(const char* key, std::size_t ks, const double* val);
 

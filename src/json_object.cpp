@@ -59,9 +59,7 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
             }
         }
         initid->maybe_null = 0;
-        initid->max_length = 0xffff;
         initid->ptr = reinterpret_cast<char*>(new captor::json_object());
-        initid->const_item = 0;
 
         return 0;
     }

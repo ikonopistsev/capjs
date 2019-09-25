@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
 
-message("${CMAKE_SOURCE_DIR}")
-
 file(READ "${RELATIVE_SOURCE_DIR}version.txt" FILE_VER)
 file(READ "${RELATIVE_SOURCE_DIR}revision.txt" FILE_REV)
 

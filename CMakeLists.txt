@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.0.2)
 
-file(READ "version.txt" FILE_VER)
+message("${CMAKE_SOURCE_DIR}")
+
+file(READ "${RELATIVE_SOURCE_DIR}version.txt" FILE_VER)
+file(READ "${RELATIVE_SOURCE_DIR}revision.txt" FILE_REV)
 
 # менять верисю пакета тут
 project(capjs VERSION ${FILE_VER} LANGUAGES CXX)
-
-include_directories("/usr/include/mysql")
-include_directories("./")
 
 macro(use_cxx11)
   if (CMAKE_VERSION VERSION_LESS "3.1")
@@ -21,13 +21,19 @@ endmacro(use_cxx11)
 use_cxx11()
 
 set(sources
-    src/json_array.cpp
-    src/json_object.cpp
-    src/json_date.cpp
-    src/json_time.cpp
-    src/json_write.cpp
-    src/mkkv.cpp
+    ${RELATIVE_SOURCE_DIR}src/json_array.cpp
+    ${RELATIVE_SOURCE_DIR}src/json_object.cpp
+    ${RELATIVE_SOURCE_DIR}src/json_date.cpp
+    ${RELATIVE_SOURCE_DIR}src/json_time.cpp
+    ${RELATIVE_SOURCE_DIR}src/json_write.cpp
+    ${RELATIVE_SOURCE_DIR}src/mkkv.cpp
 )
+
+include_directories("/usr/include/mysql")
+include_directories(${RELATIVE_SOURCE_DIR})
+include_directories("./")
+
+add_definitions("-DHAVE_DLOPEN")
 
 add_library(capjs SHARED ${sources})
 
@@ -35,4 +41,3 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
-install(TARGETS capjs LIBRARY DESTINATION lib/mysql/plugin)

@@ -33,9 +33,11 @@ include_directories("./")
 
 add_definitions("-DHAVE_DLOPEN")
 
-add_library(capjs SHARED ${sources})
-
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
+
+add_library(capjs SHARED ${sources})
+
+
 

@@ -1,4 +1,6 @@
 #include "json_object.hpp"
+#include "journal.hpp"
+#include "btdef/text.hpp"
 
 #include <mysql.h>
 
@@ -55,6 +57,14 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
             if (!key || (key_size == 0))
             {
                 snprintf(msg, MYSQL_ERRMSG_SIZE, "empty key[%d] name", i);
+
+                captor::j.cout([&]{
+                    auto text = std::mkstr(
+                        std::cref("jsobj_init: key name empty - "));
+                    text += btdef::to_text(i);
+                    return text;
+                });
+
                 return 1;
             }
         }
@@ -66,10 +76,22 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
     catch (const std::exception& e)
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
+
+        captor::j.cerr([&]{
+            auto text = std::mkstr(std::cref("jsobj_init: "));
+            text += e.what();
+            return text;
+        });
     }
     catch (...)
     {
-        strncpy(msg, "jsobj_init :*(", MYSQL_ERRMSG_SIZE);
+        static const auto text = std::mkstr(std::cref("jsobj_init :*("));
+
+        strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
+
+        captor::j.cerr([&]{
+            return text;
+        });
     }
 
     return 1;
@@ -115,11 +137,23 @@ extern "C" char* jsobj(UDF_INIT* initid, UDF_ARGS* args,
     {
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", e.what()));
+
+        captor::j.cerr([&]{
+            auto text = std::mkstr(std::cref("jsobj: "));
+            text += e.what();
+            return text;
+        });
     }
     catch (...)
     {
+        static const auto text = std::mkstr(std::cref("jsobj :*("));
+
         *length = static_cast<unsigned long>(
-            snprintf(result, 255, "jsobj :*("));
+            snprintf(result, 255, "%s", text.c_str()));
+
+        captor::j.cerr([&]{
+            return text;
+        });
     }
 
     *error = 1;

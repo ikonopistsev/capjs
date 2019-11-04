@@ -1,8 +1,12 @@
-#include <mysql.h>
+#include "btdef/string.hpp"
+#include "journal.hpp"
+
 #include <cstring>
 #include <cassert>
 #include <exception>
 #include <cstdio>
+
+#include <mysql.h>
 
 // сделать ключ=значение длинной до 254 байт
 
@@ -14,12 +18,22 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
         if (args->arg_count != 1)
         {
             strncpy(msg, "mkkv( <param> )", MYSQL_ERRMSG_SIZE);
+
+            captor::j.cout([]{
+                return std::mkstr(std::cref("mkkv_init: arg_count != 1"));
+            });
+
             return 1;
         }
 
         if (!args->attributes[0] || (args->attribute_lengths[0] == 0))
         {
             strncpy(msg, "mkkv no key", MYSQL_ERRMSG_SIZE);
+
+            captor::j.cout([]{
+                return std::mkstr(std::cref("mkkv_init: no key"));
+            });
+
             return 1;
         }
 
@@ -31,10 +45,22 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
     catch (const std::exception& e)
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
+
+        captor::j.cerr([&]{
+            auto text = std::mkstr(std::cref("mkkv_init: "));
+            text += e.what();
+            return text;
+        });
     }
     catch (...)
     {
-        strncpy(msg, "mkkv_init :*(", MYSQL_ERRMSG_SIZE);
+        static const auto text = std::mkstr(std::cref("mkkv_init :*("));
+
+        strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
+
+        captor::j.cerr([&]{
+            return text;
+        });
     }
 
     return 1;
@@ -82,11 +108,23 @@ extern "C" char* mkkv(UDF_INIT* /* initid */, UDF_ARGS* args,
     {
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", e.what()));
+
+        captor::j.cerr([&]{
+            auto text = std::mkstr(std::cref("jst: "));
+            text += e.what();
+            return text;
+        });
     }
     catch (...)
     {
+        static const auto text = std::mkstr(std::cref("mkkv :*("));
+
         *length = static_cast<unsigned long>(
-            snprintf(result, 255, "mkkv :*("));
+            snprintf(result, 255, "%s", text.c_str()));
+
+        captor::j.cerr([&]{
+            return text;
+        });
     }
 
     *error = 1;

@@ -1,5 +1,5 @@
 #include "json_array.hpp"
-
+#include "journal.hpp"
 #include <mysql.h>
 
 namespace captor {
@@ -56,10 +56,22 @@ extern "C" my_bool jsarr_init(UDF_INIT* initid,
     catch (const std::exception& e)
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
+
+        captor::j.cerr([&]{
+            auto text = std::mkstr(std::cref("jsarr_init: "));
+            text += e.what();
+            return text;
+        });
     }
     catch (...)
     {
-        strncpy(msg, "jsarr_init :*(", MYSQL_ERRMSG_SIZE);
+        static const auto text = std::mkstr(std::cref("jsarr_init :*("));
+
+        strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
+
+        captor::j.cerr([&]{
+            return text;
+        });
     }
 
     return 1;
@@ -105,11 +117,23 @@ extern "C" char* jsarr(UDF_INIT* initid, UDF_ARGS* args,
     {
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", e.what()));
+
+        captor::j.cerr([&]{
+            auto text = std::mkstr(std::cref("jsarr: "));
+            text += e.what();
+            return text;
+        });
     }
     catch (...)
     {
+        static const auto text = std::mkstr(std::cref("jsarr :*("));
+
         *length = static_cast<unsigned long>(
-            snprintf(result, 255, "jsarr :*("));
+            snprintf(result, 255, "%s", text.c_str()));
+
+        captor::j.cerr([&]{
+            return text;
+        });
     }
 
     *error = 1;

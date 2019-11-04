@@ -1,5 +1,6 @@
 #include "btdef/date.hpp"
 #include "btdef/ref.hpp"
+#include "journal.hpp"
 
 #include <mysql.h>
 
@@ -12,6 +13,13 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
         if (args->arg_count != 1)
         {
             strncpy(msg, "use jsd( <miliseconds> )", MYSQL_ERRMSG_SIZE);
+
+            captor::j.cout([&]{
+                static const auto text =
+                    std::mkstr(std::cref("jsd_init: arg_count != 1"));
+                return text;
+            });
+
             return 1;
         }
 
@@ -24,10 +32,22 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
     catch (const std::exception& e)
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
+
+        captor::j.cerr([&]{
+            auto text = std::mkstr(std::cref("jsd_init: "));
+            text += e.what();
+            return text;
+        });
     }
     catch (...)
     {
-        strncpy(msg, "jsd_init :*(", MYSQL_ERRMSG_SIZE);
+        static const auto text = std::mkstr(std::cref("jsd_init :*("));
+
+        strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
+
+        captor::j.cerr([&]{
+            return text;
+        });
     }
 
     return 1;
@@ -78,11 +98,23 @@ extern "C" char* jsd(UDF_INIT*, UDF_ARGS *args,
     {
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", e.what()));
+
+        captor::j.cerr([&]{
+            auto text = std::mkstr(std::cref("jsd: "));
+            text += e.what();
+            return text;
+        });
     }
     catch (...)
     {
+        static const auto text = std::mkstr(std::cref("jsd :*("));
+
         *length = static_cast<unsigned long>(
-            snprintf(result, 255, "jsd :*("));
+            snprintf(result, 255, "%s", text.c_str()));
+
+        captor::j.cerr([&]{
+            return text;
+        });
     }
 
     *error = 1;

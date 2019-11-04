@@ -25,6 +25,7 @@ set(sources
     ${RELATIVE_SOURCE_DIR}src/json_time.cpp
     ${RELATIVE_SOURCE_DIR}src/json_write.cpp
     ${RELATIVE_SOURCE_DIR}src/mkkv.cpp
+    ${RELATIVE_SOURCE_DIR}src/journal.cpp
 )
 
 include_directories("/usr/include/mysql")

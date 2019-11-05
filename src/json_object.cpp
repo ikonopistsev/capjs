@@ -58,7 +58,7 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
             {
                 snprintf(msg, MYSQL_ERRMSG_SIZE, "empty key[%d] name", i);
 
-                captor::j.cout([&]{
+                cout([&]{
                     auto text = std::mkstr(
                         std::cref("jsobj_init: key name empty - "));
                     text += btdef::to_text(i);
@@ -77,7 +77,7 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jsobj_init: "));
             text += e.what();
             return text;
@@ -89,7 +89,7 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
 
         strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }
@@ -138,7 +138,7 @@ extern "C" char* jsobj(UDF_INIT* initid, UDF_ARGS* args,
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", e.what()));
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jsobj: "));
             text += e.what();
             return text;
@@ -151,7 +151,7 @@ extern "C" char* jsobj(UDF_INIT* initid, UDF_ARGS* args,
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", text.c_str()));
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }

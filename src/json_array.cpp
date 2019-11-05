@@ -57,7 +57,7 @@ extern "C" my_bool jsarr_init(UDF_INIT* initid,
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jsarr_init: "));
             text += e.what();
             return text;
@@ -69,7 +69,7 @@ extern "C" my_bool jsarr_init(UDF_INIT* initid,
 
         strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }
@@ -118,7 +118,7 @@ extern "C" char* jsarr(UDF_INIT* initid, UDF_ARGS* args,
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", e.what()));
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jsarr: "));
             text += e.what();
             return text;
@@ -131,7 +131,7 @@ extern "C" char* jsarr(UDF_INIT* initid, UDF_ARGS* args,
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", text.c_str()));
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }

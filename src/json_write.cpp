@@ -120,7 +120,7 @@ void write_value(string_type& result, char t, const char* val, std::size_t vs)
             return;
         default:
             write_value(result, val, vs);
-        };
+        }
     }
     else
         write_null(result);

@@ -1,4 +1,5 @@
 #pragma once
+#include <utility>
 
 namespace captor {
 
@@ -53,6 +54,22 @@ private:
     bool level_allow(int level) const noexcept;
 };
 
-extern journal j;
+static inline journal& j() noexcept
+{
+    static journal j;
+    return j;
+}
 
 } // namespace captor
+
+template<class F>
+static void cerr(F fn) noexcept
+{
+    captor::j().cerr(std::move(fn));
+}
+
+template<class F>
+static void cout(F fn) noexcept
+{
+    captor::j().cout(std::move(fn));
+}

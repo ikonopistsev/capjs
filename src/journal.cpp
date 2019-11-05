@@ -3,7 +3,7 @@
 #include <syslog.h>
 #include <cassert>
 
-using namespace captor;
+namespace captor {
 
 journal::journal() noexcept
     : mask_(LOG_UPTO(LOG_NOTICE))
@@ -40,4 +40,6 @@ bool journal::level_allow(int level) const noexcept
     return (mask_ & level) != 0;
 }
 
-static journal j;
+} // namespace captor
+
+

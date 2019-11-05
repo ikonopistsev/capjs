@@ -13,7 +13,7 @@ extern "C" my_bool jst_init(UDF_INIT* initid,
         {
             strncpy(msg, "use jst( <iso date> )", MYSQL_ERRMSG_SIZE);
 
-            captor::j.cout([]{
+            cout([]{
                 return std::mkstr(std::cref("jst_init: iso date"));
             });
 
@@ -25,7 +25,7 @@ extern "C" my_bool jst_init(UDF_INIT* initid,
             strncpy(msg, "bad arg type, use: jst(\"iso date\")",
                     MYSQL_ERRMSG_SIZE);
 
-            captor::j.cout([]{
+            cout([]{
                 return std::mkstr(std::cref("jst_init: bad arg type"));
             });
 
@@ -42,7 +42,7 @@ extern "C" my_bool jst_init(UDF_INIT* initid,
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jst_init: "));
             text += e.what();
             return text;
@@ -54,7 +54,7 @@ extern "C" my_bool jst_init(UDF_INIT* initid,
 
         strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }
@@ -77,7 +77,7 @@ extern "C" long long jst(UDF_INIT* /* initid */,
     }
     catch (const std::exception& e)
     {
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jst: "));
             text += e.what();
             return text;
@@ -85,7 +85,7 @@ extern "C" long long jst(UDF_INIT* /* initid */,
     }
     catch (...)
     {
-        captor::j.cerr([&]{
+        cerr([&]{
             static const auto text = std::mkstr(std::cref("jst :*("));
             return text;
         });

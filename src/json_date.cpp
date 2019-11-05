@@ -14,7 +14,7 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
         {
             strncpy(msg, "use jsd( <miliseconds> )", MYSQL_ERRMSG_SIZE);
 
-            captor::j.cout([&]{
+            cout([&]{
                 static const auto text =
                     std::mkstr(std::cref("jsd_init: arg_count != 1"));
                 return text;
@@ -33,7 +33,7 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jsd_init: "));
             text += e.what();
             return text;
@@ -45,7 +45,7 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
 
         strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }
@@ -99,7 +99,7 @@ extern "C" char* jsd(UDF_INIT*, UDF_ARGS *args,
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", e.what()));
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jsd: "));
             text += e.what();
             return text;
@@ -112,7 +112,7 @@ extern "C" char* jsd(UDF_INIT*, UDF_ARGS *args,
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", text.c_str()));
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }

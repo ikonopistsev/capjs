@@ -9,7 +9,6 @@
 #include <mysql.h>
 
 // сделать ключ=значение длинной до 254 байт
-
 extern "C" my_bool mkkv_init(UDF_INIT *initid,
     UDF_ARGS *args, char *msg)
 {
@@ -19,7 +18,7 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
         {
             strncpy(msg, "mkkv( <param> )", MYSQL_ERRMSG_SIZE);
 
-            captor::j.cout([]{
+            cout([]{
                 return std::mkstr(std::cref("mkkv_init: arg_count != 1"));
             });
 
@@ -30,7 +29,7 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
         {
             strncpy(msg, "mkkv no key", MYSQL_ERRMSG_SIZE);
 
-            captor::j.cout([]{
+            cout([]{
                 return std::mkstr(std::cref("mkkv_init: no key"));
             });
 
@@ -46,7 +45,7 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
     {
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("mkkv_init: "));
             text += e.what();
             return text;
@@ -58,7 +57,7 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
 
         strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }
@@ -109,7 +108,7 @@ extern "C" char* mkkv(UDF_INIT* /* initid */, UDF_ARGS* args,
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", e.what()));
 
-        captor::j.cerr([&]{
+        cerr([&]{
             auto text = std::mkstr(std::cref("jst: "));
             text += e.what();
             return text;
@@ -122,7 +121,7 @@ extern "C" char* mkkv(UDF_INIT* /* initid */, UDF_ARGS* args,
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", text.c_str()));
 
-        captor::j.cerr([&]{
+        cerr([&]{
             return text;
         });
     }

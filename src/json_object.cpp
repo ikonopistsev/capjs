@@ -2,7 +2,7 @@
 #include "journal.hpp"
 #include "btdef/text.hpp"
 
-#include <mysql.h>
+#include "mysql.hpp"
 
 namespace captor {
 

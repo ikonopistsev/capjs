@@ -1,7 +1,7 @@
 #include "btdef/date.hpp"
 #include "journal.hpp"
 
-#include <mysql.h>
+#include "mysql.hpp"
 
 // конвертация в json
 extern "C" my_bool jst_init(UDF_INIT* initid,

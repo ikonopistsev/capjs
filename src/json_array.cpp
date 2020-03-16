@@ -1,6 +1,6 @@
 #include "json_array.hpp"
 #include "journal.hpp"
-#include <mysql.h>
+#include "mysql.hpp"
 
 namespace captor {
 

@@ -6,7 +6,7 @@
 #include <exception>
 #include <cstdio>
 
-#include <mysql.h>
+#include "mysql.hpp"
 
 // сделать ключ=значение длинной до 254 байт
 extern "C" my_bool mkkv_init(UDF_INIT *initid,

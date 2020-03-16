@@ -2,7 +2,7 @@
 #include "btdef/ref.hpp"
 #include "journal.hpp"
 
-#include <mysql.h>
+#include "mysql.hpp"
 
 // конвертация в json
 extern "C" my_bool jsd_init(UDF_INIT* initid,

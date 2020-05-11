@@ -45,5 +45,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
 add_library(capjs SHARED ${sources})
 
+option(STATIC_STDCPP "static linking of libstdc++" ON)
+if (STATIC_STDCPP)
+    target_link_libraries(capjs LINK_PRIVATE -static-libgcc -static-libstdc++ -l:libstdc++.a)
+endif()
+
 
 

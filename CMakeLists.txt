@@ -18,6 +18,11 @@ endmacro(use_cxx11)
 
 use_cxx11()
 
+option(HAVE_MY_BOOL "mysql has my_bool type" OFF)
+if (HAVE_MY_BOOL)
+  add_definitions(-DHAVE_TYPE_MY_BOOL)
+endif()
+
 set(sources
     ${RELATIVE_SOURCE_DIR}src/json_array.cpp
     ${RELATIVE_SOURCE_DIR}src/json_object.cpp

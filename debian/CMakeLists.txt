@@ -9,7 +9,7 @@ install(TARGETS capjs LIBRARY DESTINATION lib/mysql/plugin)
 #настройки cpack'a
 set(CPACK_PACKAGE_VENDOR "ikonopistsev")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "mysql plugin is converting result to json objects")
-set(CPACK_PACKAGE_CONTACT "ikonopistsev@dev4.fun")
+set(CPACK_PACKAGE_CONTACT "admin@dev4.fun")
 set(CPACK_STRIP_FILES TRUE)
 
 set(CPACK_GENERATOR "DEB")

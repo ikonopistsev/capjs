@@ -1,6 +1,8 @@
 #include "json_array.hpp"
 #include "journal.hpp"
 #include "mysql.hpp"
+#include "btdef/util/basic_string_ext.hpp"
+#include "btdef/ref/basic_string_ext.hpp"
 
 namespace captor {
 

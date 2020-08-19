@@ -1,7 +1,8 @@
 #include "json_object.hpp"
 #include "journal.hpp"
 #include "btdef/text.hpp"
-
+#include "btdef/util/basic_string_ext.hpp"
+#include "btdef/ref/basic_string_ext.hpp"
 #include "mysql.hpp"
 
 namespace captor {

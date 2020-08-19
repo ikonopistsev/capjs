@@ -1,10 +1,10 @@
 #pragma once
 
-#include "btdef/string.hpp"
+#include <string>
 
 namespace captor {
 
-typedef btdef::string string_type;
+typedef std::string string_type;
 
 void write_value(string_type& result, char t, const char* val, std::size_t vs);
 

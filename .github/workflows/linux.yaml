@@ -36,5 +36,4 @@ jobs:
         os: 
           - ubuntu-latest
 name: linux
-true: 
-  - push
+on: [push]

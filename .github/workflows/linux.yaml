@@ -15,6 +15,7 @@ jobs:
           appendedCacheKey: "${{ hashFiles(env.vcpkgResponseFile) }}"
           vcpkgArguments: "@${{ env.vcpkgResponseFile }}"
           vcpkgDirectory: "${{ github.workspace }}/vcpkg"
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
       - 
         name: "Build with CMake and Ninja"
         uses: lukka/run-cmake@v2

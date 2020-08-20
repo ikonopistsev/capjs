@@ -23,6 +23,11 @@ if (HAVE_MY_BOOL)
   add_definitions(-DHAVE_TYPE_MY_BOOL)
 endif()
 
+option(TRACE_CAPACITY "trace string capacity" OFF)
+if (TRACE_CAPACITY)
+  add_definitions(-DTRACE_CAPACITY)
+endif()
+
 set(sources
     ${RELATIVE_SOURCE_DIR}src/json_array.cpp
     ${RELATIVE_SOURCE_DIR}src/json_object.cpp
@@ -40,8 +45,6 @@ include_directories("./")
 add_definitions("-DHAVE_DLOPEN")
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
 add_library(capjs SHARED ${sources})
 

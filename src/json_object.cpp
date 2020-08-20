@@ -1,9 +1,11 @@
 #include "json_object.hpp"
-#include "journal.hpp"
-#include "btdef/text.hpp"
 #include "btdef/util/basic_string_ext.hpp"
 #include "btdef/ref/basic_string_ext.hpp"
+#include "btdef/text.hpp"
+#include "journal.hpp"
 #include "mysql.hpp"
+
+#include <algorithm>
 
 namespace captor {
 
@@ -56,6 +58,7 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
 {
     try
     {
+        auto arg_size = 0u;
         for (unsigned int i = 0; i < args->arg_count; ++i)
         {
             auto key = args->attributes[i];
@@ -73,9 +76,22 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
 
                 return 1;
             }
+            arg_size += args->lengths[i] + key_size;
         }
+
+        arg_size *= 2;
+
+#ifdef TRACE_CAPACITY
+        cout([&]{
+            auto text = std::mkstr(std::cref("reserve: "));
+            text += btdef::to_text(arg_size);
+            return text;
+        });
+#endif // TRACE_CAPACITY
+
         initid->maybe_null = 0;
-        initid->ptr = reinterpret_cast<char*>(new captor::json_object());
+        initid->ptr = reinterpret_cast<char*>(
+            new captor::json_object(std::min(8192u, std::max(320u, arg_size))));
 
         return 0;
     }
@@ -135,6 +151,17 @@ extern "C" char* jsobj(UDF_INIT* initid, UDF_ARGS* args,
         }
 
         j->end();
+
+#ifdef TRACE_CAPACITY
+        cout([&]{
+            auto text = std::mkstr(std::cref("size: "));
+            text += btdef::to_text(j->size());
+            text += std::mkstr(std::cref(" capacity: "));
+            text += btdef::to_text(j->capacity());
+            return text;
+
+        });
+#endif // TRACE_CAPACITY
 
         *length = j->size();
         return const_cast<char*>(j->data());

@@ -31,6 +31,11 @@ public:
     {
         return text_.size();
     }
+
+    std::size_t capacity() const noexcept
+    {
+        return text_.capacity();
+    }
 };
 
 } // namespace captor

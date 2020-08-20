@@ -1,8 +1,11 @@
 #include "json_array.hpp"
-#include "journal.hpp"
-#include "mysql.hpp"
 #include "btdef/util/basic_string_ext.hpp"
 #include "btdef/ref/basic_string_ext.hpp"
+#include "btdef/text.hpp"
+#include "journal.hpp"
+#include "mysql.hpp"
+
+#include <algorithm>
 
 namespace captor {
 
@@ -51,12 +54,28 @@ void json_array::add(const char* key, std::size_t ks, const long long* val)
 
 // конвертация в json array
 extern "C" my_bool jsarr_init(UDF_INIT* initid,
-    UDF_ARGS* /* args */, char* msg)
+    UDF_ARGS* args, char* msg)
 {
     try
     {
+        auto arg_size = 0u;
+        for (unsigned int i = 0; i < args->arg_count; ++i)
+            arg_size += (args->lengths[i] + args->attribute_lengths[i]);
+
+        arg_size *= 2;
+
+#ifdef TRACE_CAPACITY
+        cout([&]{
+            auto text = std::mkstr(std::cref("reserve: "));
+            text += btdef::to_text(arg_size);
+            return text;
+        });
+#endif // TRACE_CAPACITY
+
         initid->maybe_null = 0;
-        initid->ptr = reinterpret_cast<char*>(new captor::json_array());
+        initid->ptr = reinterpret_cast<char*>(
+            new captor::json_array(std::min(8192u, std::max(160u, arg_size))));
+
 
         return 0;
     }
@@ -116,6 +135,16 @@ extern "C" char* jsarr(UDF_INIT* initid, UDF_ARGS* args,
         }
 
         j->end();
+
+#ifdef TRACE_CAPACITY
+        cout([&]{
+            auto text = std::mkstr(std::cref("size: "));
+            text += btdef::to_text(j->size());
+            text += std::mkstr(std::cref(" capacity: "));
+            text += btdef::to_text(j->capacity());
+            return text;
+        });
+#endif // TRACE_CAPACITY
 
         *length = j->size();
         return const_cast<char*>(j->data());

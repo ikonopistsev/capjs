@@ -18,6 +18,7 @@ jobs:
           vcpkgArguments: "@${{ env.vcpkgResponseFile }}"
           vcpkgDirectory: "${{ github.workspace }}/vcpkg"
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          vcpkgTriplet: '${{ matrix.triplet }}'
       - 
         name: "Build with CMake and Ninja"
         uses: lukka/run-cmake@v2

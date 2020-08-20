@@ -9,7 +9,7 @@ class json_array
     string_type text_{};
 
 public:
-    json_array() = default;
+    json_array(std::size_t capacity = 320);
 
     void start();
 

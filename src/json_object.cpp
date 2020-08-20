@@ -7,6 +7,11 @@
 
 namespace captor {
 
+json_object::json_object(std::size_t capacity)
+{
+    text_.reserve(capacity);
+}
+
 void json_object::start()
 {
     // обнуляем переменную и присваиваем [

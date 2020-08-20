@@ -9,7 +9,7 @@ class json_object
     string_type text_{};
 
 public:
-    json_object() = default;
+    json_object(std::size_t capacity = 640);
 
     void start();
 

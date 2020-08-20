@@ -6,6 +6,11 @@
 
 namespace captor {
 
+json_array::json_array(std::size_t capacity)
+{
+    text_.reserve(capacity);
+}
+
 void json_array::start()
 {
     // обнуляем переменную и присваиваем [

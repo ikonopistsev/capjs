@@ -5,7 +5,11 @@ jobs:
     runs-on: "${{ matrix.os }}"
     steps: 
       - 
+        uses: actions/cache@v1
+      - 
         uses: actions/checkout@master
+        with:
+          submodules: true
       - 
         uses: lukka/get-cmake@latest
       - 

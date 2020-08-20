@@ -1,45 +1,40 @@
-# Copyright (c) 2019-2020 Luca Cappa
-# Released under the term specified in file LICENSE.txt
-# SPDX short identifier: MIT
-name: linux
-on: [push]
-
-jobs:
-  job:
-    name: ${{ matrix.os }}-hosted-basic
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        include:
-          - os: ubuntu-latest
-            triplet: x64-linux
-            vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
-            vcpkgPackages: 'sqlite3'
-
-    steps:
-      - uses: actions/checkout@master
-    # Install latest CMake.
-      - uses: lukka/get-cmake@latest
-
-    # Restore from cache the previously built ports. If "cache miss", then provision vcpkg, install desired ports, finally cache everything for the next run.
-      - name: Restore from cache and run vcpkg
+--- 
+jobs: 
+  job: 
+    name: "${{ matrix.os }}-hosted-basic"
+    runs-on: "${{ matrix.os }}"
+    steps: 
+      - 
+        uses: actions/checkout@master
+      - 
+        uses: lukka/get-cmake@latest
+      - 
+        name: "Restore from cache and run vcpkg"
         uses: lukka/run-vcpkg@v3
-        with:
-	 vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
-	 vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-	 appendedCacheKey: ${{ hashFiles(env.vcpkgResponseFile) }}
-
-      - name: 'Build with CMake and Ninja'
+        with: 
+          appendedCacheKey: "${{ hashFiles(env.vcpkgResponseFile) }}"
+          vcpkgArguments: "@${{ env.vcpkgResponseFile }}"
+          vcpkgDirectory: "${{ github.workspace }}/vcpkg"
+      - 
+        name: "Build with CMake and Ninja"
         uses: lukka/run-cmake@v2
-        with:
-	    cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-	    cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
-	    useVcpkgToolchainFile: true
-	    buildDirectory: '${{ runner.workspace }}/b/ninja'
-	    cmakeAppendedArgs: '-GNinja Multi-Config'
-        # Or build multiple configurations out of a CMakeSettings.json file created with Visual Studio.
-        # cmakeListsOrSettingsJson: CMakeSettingsJson
-        # cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettings.json/CMakeSettings.json'
-        # configurationRegexFilter: '${{ matrix.configuration }}'
+        with: 
+          buildDirectory: "${{ runner.workspace }}/b/ninja"
+          cmakeAppendedArgs: "-GNinja Multi-Config"
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeListsTxtPath: "${{ github.workspace }}/CMakeLists.txt"
+          useVcpkgToolchainFile: true
+    strategy: 
+      fail-fast: false
+      matrix: 
+        include: 
+          - 
+            os: ubuntu-latest
+            triplet: x64-linux
+            vcpkgCommitId: 8a9a97315aefb3f8bc5d81bf66ca0025938b9c91
+            vcpkgPackages: sqlite3
+        os: 
+          - ubuntu-latest
+name: linux
+true: 
+  - push

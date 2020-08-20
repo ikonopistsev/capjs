@@ -1,4 +1,4 @@
-![linux](https://github.com/ikonopistsev/capjs/workflows/linux/badge.svg)
+[![linux](https://github.com/ikonopistsev/capjs/workflows/linux/badge.svg)]https://github.com/ikonopistsev/capjs/actions?query=workflow%3Alinux
 
 # capjs
 

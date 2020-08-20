@@ -28,7 +28,7 @@ jobs:
         uses: lukka/run-cmake@v2
         with: 
           buildDirectory: "${{ runner.workspace }}/b/ninja"
-          cmakeAppendedArgs: "-GNinja Multi-Config"
+          cmakeAppendedArgs: "-GNinja Multi-Config -DHAVE_MY_BOOL"
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: "${{ github.workspace }}/CMakeLists.txt"
           useVcpkgToolchainFile: true

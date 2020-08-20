@@ -60,21 +60,30 @@ extern "C" my_bool jsarr_init(UDF_INIT* initid,
     {
         auto arg_size = 0u;
         for (unsigned int i = 0; i < args->arg_count; ++i)
-            arg_size += (args->lengths[i] + args->attribute_lengths[i]);
+            arg_size += args->lengths[i];
 
-        arg_size *= 2;
+#ifdef TRACE_CAPACITY
+        auto need_size = arg_size;
+#endif // TRACE_CAPACITY
+
+        arg_size *= 2u;
+
+        constexpr auto div = 256u;
+        arg_size = ((arg_size / div) * div) + div;
 
 #ifdef TRACE_CAPACITY
         cout([&]{
             auto text = std::mkstr(std::cref("reserve: "));
             text += btdef::to_text(arg_size);
+            text += std::cref(" need: ");
+            text += btdef::to_text(need_size);
             return text;
         });
 #endif // TRACE_CAPACITY
 
         initid->maybe_null = 0;
         initid->ptr = reinterpret_cast<char*>(
-            new captor::json_array(std::min(8192u, std::max(160u, arg_size))));
+            new captor::json_array(std::min(8192u, arg_size)));
 
 
         return 0;

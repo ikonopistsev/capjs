@@ -15,10 +15,14 @@ jobs:
         uses: lukka/run-vcpkg@v3
         with: 
           appendedCacheKey: "${{ hashFiles(env.vcpkgResponseFile) }}"
-          vcpkgArguments: "@${{ env.vcpkgResponseFile }}"
-          vcpkgDirectory: "${{ github.workspace }}/vcpkg"
-          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          vcpkgArguments: '${{ matrix.vcpkgPackages }}'
           vcpkgTriplet: '${{ matrix.triplet }}'
+          vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          #vcpkgArguments: "@${{ env.vcpkgResponseFile }}"
+          #vcpkgDirectory: "${{ github.workspace }}/vcpkg"
+          #vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          #vcpkgTriplet: '${{ matrix.triplet }}'
       - 
         name: "Build with CMake and Ninja"
         uses: lukka/run-cmake@v2

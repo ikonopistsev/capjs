@@ -1,3 +1,5 @@
+![linux](https://github.com/ikonopistsev/capjs/workflows/linux/badge.svg)
+
 # capjs
 
 Mysql UDF библиотека генерации JSON объектов через SQL зарпросы

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.10)
 
 file(READ "${RELATIVE_SOURCE_DIR}version.txt" FILE_VER)
 file(READ "${RELATIVE_SOURCE_DIR}revision.txt" FILE_REV)

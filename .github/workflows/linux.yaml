@@ -3,6 +3,8 @@ jobs:
   job: 
     name: "${{ matrix.os }}-hosted-basic"
     runs-on: "${{ matrix.os }}"
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
     steps: 
       - 
         uses: actions/checkout@master
@@ -39,7 +41,7 @@ jobs:
           - 
             os: ubuntu-latest
             triplet: x64-linux
-            vcpkgCommitId: 8a9a97315aefb3f8bc5d81bf66ca0025938b9c91
+            vcpkgCommitId: 2fbd692f56c2a94f1805320a4abf2d366f116cc0
             vcpkgPackages: sqlite3
         os: 
           - ubuntu-latest

@@ -1,9 +1,0 @@
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/CMakeFiles/capjs.dir
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/CMakeFiles/package.dir
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/CMakeFiles/package_source.dir
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/CMakeFiles/edit_cache.dir
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/CMakeFiles/rebuild_cache.dir
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/btdef/CMakeFiles/package.dir
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/btdef/CMakeFiles/package_source.dir
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/btdef/CMakeFiles/edit_cache.dir
-/home/meil/devel/linux/captor-meta/capjs/build-threadutx/btdef/CMakeFiles/rebuild_cache.dir

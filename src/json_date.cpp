@@ -1,5 +1,4 @@
 #include "btdef/date.hpp"
-#include "btdef/ref.hpp"
 #include "journal.hpp"
 
 #include "mysql.hpp"
@@ -15,9 +14,7 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
             strncpy(msg, "use jsd( <miliseconds> )", MYSQL_ERRMSG_SIZE);
 
             cout([&]{
-                static const auto text =
-                    std::mkstr(std::cref("jsd_init: arg_count != 1"));
-                return text;
+                return std::string("jsd_init: arg_count != 1");
             });
 
             return 1;
@@ -34,14 +31,14 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
 
         cerr([&]{
-            auto text = std::mkstr(std::cref("jsd_init: "));
+            std::string text("jsd_init: ");
             text += e.what();
             return text;
         });
     }
     catch (...)
     {
-        static const auto text = std::mkstr(std::cref("jsd_init :*("));
+        static const std::string text("jsd_init :*(");
 
         strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
 
@@ -62,7 +59,7 @@ extern "C" char* jsd(UDF_INIT*, UDF_ARGS *args,
         auto v = args->args[0];
         if (!v)
         {
-            static const ref::string empty(std::cref("null"));
+            static const std::string empty("null");
             static const auto sz = empty.size();
             std::memcpy(result, empty.data(), sz);
             *length = sz;
@@ -86,7 +83,7 @@ extern "C" char* jsd(UDF_INIT*, UDF_ARGS *args,
             break;
         default:;
         }
-        auto text = btdef::date(t).json_text();
+        auto text = btdef::date(t).to_json();
         auto size = text.size();
         std::memcpy(result, text.data(), size);
         result[size] = '\0';
@@ -100,14 +97,14 @@ extern "C" char* jsd(UDF_INIT*, UDF_ARGS *args,
             snprintf(result, 255, "%s", e.what()));
 
         cerr([&]{
-            auto text = std::mkstr(std::cref("jsd: "));
+            std::string text("jsd: ");
             text += e.what();
             return text;
         });
     }
     catch (...)
     {
-        static const auto text = std::mkstr(std::cref("jsd :*("));
+        static const std::string text("jsd :*(");
 
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", text.c_str()));

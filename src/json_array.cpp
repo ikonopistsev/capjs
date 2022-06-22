@@ -1,6 +1,4 @@
 #include "json_array.hpp"
-#include "btdef/util/basic_string_ext.hpp"
-#include "btdef/ref/basic_string_ext.hpp"
 #include "btdef/text.hpp"
 #include "journal.hpp"
 #include "mysql.hpp"
@@ -73,9 +71,9 @@ extern "C" my_bool jsarr_init(UDF_INIT* initid,
 
 #ifdef TRACE_CAPACITY
         cout([&]{
-            auto text = std::mkstr(std::cref("reserve: "));
+            std::string text("reserve: ");
             text += btdef::to_text(arg_size);
-            text += std::cref(" need: ");
+            text += " need: ";
             text += btdef::to_text(need_size);
             return text;
         });
@@ -93,14 +91,14 @@ extern "C" my_bool jsarr_init(UDF_INIT* initid,
         snprintf(msg, MYSQL_ERRMSG_SIZE, "%s", e.what());
 
         cerr([&]{
-            auto text = std::mkstr(std::cref("jsarr_init: "));
+            std::string text("jsarr_init: ");
             text += e.what();
             return text;
         });
     }
     catch (...)
     {
-        static const auto text = std::mkstr(std::cref("jsarr_init :*("));
+        static const std::string text("jsarr_init :*(");
 
         strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
 
@@ -147,9 +145,9 @@ extern "C" char* jsarr(UDF_INIT* initid, UDF_ARGS* args,
 
 #ifdef TRACE_CAPACITY
         cout([&]{
-            auto text = std::mkstr(std::cref("size: "));
+            std::string text("size: ");
             text += btdef::to_text(j->size());
-            text += std::mkstr(std::cref(" capacity: "));
+            text += " capacity: ";
             text += btdef::to_text(j->capacity());
             return text;
         });
@@ -164,14 +162,14 @@ extern "C" char* jsarr(UDF_INIT* initid, UDF_ARGS* args,
             snprintf(result, 255, "%s", e.what()));
 
         cerr([&]{
-            auto text = std::mkstr(std::cref("jsarr: "));
+            std::string text("jsarr: ");
             text += e.what();
             return text;
         });
     }
     catch (...)
     {
-        static const auto text = std::mkstr(std::cref("jsarr :*("));
+        static const std::string text("jsarr :*(");
 
         *length = static_cast<unsigned long>(
             snprintf(result, 255, "%s", text.c_str()));

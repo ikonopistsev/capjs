@@ -2,13 +2,13 @@
 
 #include "btdef/text.hpp"
 #include "btdef/date.hpp"
-#include "btdef/ref.hpp"
+#include "btdef/conv/to_hex.hpp"
 
 namespace captor {
 
 static inline void write_null(string_type& result)
 {
-    static const ref::string empty(std::cref("null"));
+    static const std::string empty("null");
     result += empty;
 }
 
@@ -74,7 +74,7 @@ void write_escape(string_type& result, const char* val, std::size_t vs)
                     result += 'u';
                     result += '0';
                     result += '0';
-                    result += ref::to_hex(c);
+                    result += btdef::conv::to_hex(c);
                 } else {
                     result += c;
                 }
@@ -173,7 +173,7 @@ static inline void write_time(string_type& result, long long val)
 {
     auto t = static_cast<btdef::date::value_t>(val);
     result += '\"';
-    result += btdef::date(t).json_text();
+    result += btdef::date(t).to_json();
     result += '\"';
 }
 

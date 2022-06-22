@@ -1,0 +1,3 @@
+/home/meil/devel/linux/captor-meta/capjs/build/CMakeFiles/capjs.dir
+/home/meil/devel/linux/captor-meta/capjs/build/CMakeFiles/edit_cache.dir
+/home/meil/devel/linux/captor-meta/capjs/build/CMakeFiles/rebuild_cache.dir

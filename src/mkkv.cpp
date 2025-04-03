@@ -14,12 +14,14 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
 {
     try
     {
+#ifdef USE_COLUMN_NAME
         if (args->arg_count != 1)
         {
             strncpy(msg, "mkkv( <param> )", MYSQL_ERRMSG_SIZE);
 
             cout([]{
-                return std::string("mkkv_init: arg_count != 1");
+                static const auto text = "mkkv_init: arg_count != 1";
+                return text;
             });
 
             return 1;
@@ -27,15 +29,49 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
 
         if (!args->attributes[0] || (args->attribute_lengths[0] == 0))
         {
-            strncpy(msg, "mkkv no key", MYSQL_ERRMSG_SIZE);
-
+            static const auto text = "mkkv_init: no key";
+            strncpy(msg, text, MYSQL_ERRMSG_SIZE);
             cout([]{
-                return std::string("mkkv_init: no key");
+                return text;
             });
 
             return 1;
         }
+#else
+    if (args->arg_count != 2)
+    {
+        strncpy(msg, "mkkv( <param> )", MYSQL_ERRMSG_SIZE);
 
+        cout([]{
+            static const auto text = "mkkv_init: arg_count != 2";
+            return text;
+        });
+
+        return 1;
+    }
+
+    if (!args->args[0] || args->lengths[0] == 0)
+    {
+        static const auto text = "mkkv_init: no key";
+        strncpy(msg, text, MYSQL_ERRMSG_SIZE);
+        cout([]{
+            return text;
+        });
+
+        return 1;
+    }
+
+    if (args->arg_type[0] != STRING_RESULT)
+    {
+        static const auto text = "mkkv_init: key is not string";
+        strncpy(msg, text, MYSQL_ERRMSG_SIZE);
+        cout([]{
+            return text;
+        });
+
+        return 1;
+    }
+#endif
         initid->maybe_null = 1;
         initid->const_item = 0;
 
@@ -53,9 +89,8 @@ extern "C" my_bool mkkv_init(UDF_INIT *initid,
     }
     catch (...)
     {
-        std::string text("mkkv_init :*(");
-        strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
-
+        static const auto text = "mkkv_init :*(";
+        strncpy(msg, text, MYSQL_ERRMSG_SIZE);
         cerr([&]{
             return text;
         });
@@ -70,6 +105,7 @@ extern "C" char* mkkv(UDF_INIT* /* initid */, UDF_ARGS* args,
 {
     try
     {
+#ifdef USE_COLUMN_NAME        
         // ключ должен быть
         auto k = args->attributes[0];
         auto type = args->arg_type[0];
@@ -80,6 +116,18 @@ extern "C" char* mkkv(UDF_INIT* /* initid */, UDF_ARGS* args,
             v = empty;
             type = STRING_RESULT;
         }
+#else
+        // ключ должен быть
+        auto k = args->args[0];
+        auto type = args->arg_type[1];
+        auto v = args->args[1];
+        if (!v)
+        {
+            static char empty[] = "null";
+            v = empty;
+            type = STRING_RESULT;
+        }
+#endif
 
         switch (type)
         {
@@ -115,10 +163,9 @@ extern "C" char* mkkv(UDF_INIT* /* initid */, UDF_ARGS* args,
     }
     catch (...)
     {
-        static const std::string text("mkkv :*(");
-
+        static const auto text = "mkkv :*(";
         *length = static_cast<unsigned long>(
-            snprintf(result, 255, "%s", text.c_str()));
+            snprintf(result, 255, "%s", text));
 
         cerr([&]{
             return text;

@@ -57,17 +57,60 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
     try
     {
         auto arg_size = 0u;
+#ifndef USE_COLUMN_NAME 
+        // проверяем что количество аргументов > 1
+        if (args->arg_count < 2)
+        {
+            static const auto text = "jsobj_init: arg_count < 2";
+            strncpy(msg, text, MYSQL_ERRMSG_SIZE);
+            cout([]{
+                return text;
+            });
+
+            return 1;
+        }
+        // проверяем что количество аргументов четное
+        if (args->arg_count % 2)
+        {
+            static const auto text = "jsobj_init: arg_count % 2";
+            strncpy(msg, text, MYSQL_ERRMSG_SIZE);
+            cout([]{
+                return text;
+            });
+
+            return 1;
+        }
+        
+        // разбираем парами arg[0] = key, arg[1] = value и тд           
+        for (unsigned int i = 0; i < args->arg_count; i += 2)
+        {
+            auto key = args->args[i];
+            auto key_size = args->lengths[i];
+
+            if (args->arg_type[i] != STRING_RESULT)
+            {
+                snprintf(msg, MYSQL_ERRMSG_SIZE, "jsobj_init: key[%d] is not string", i);
+                cout([&]{
+                    std::string text("jsobj_init: key is not string - ");
+                    text += std::to_string(i);
+                    return text;
+                });
+        
+                return 1;
+            }            
+#else 
         for (unsigned int i = 0; i < args->arg_count; ++i)
         {
             auto key = args->attributes[i];
             auto key_size = args->attribute_lengths[i];
+#endif //
             if (!key || (key_size == 0))
             {
                 snprintf(msg, MYSQL_ERRMSG_SIZE, "empty key[%d] name", i);
 
                 cout([&]{
                     std::string text("jsobj_init: key name empty - ");
-                    text += btdef::to_text(i);
+                    text += std::to_string(i);
                     return text;
                 });
 
@@ -87,9 +130,9 @@ extern "C" my_bool jsobj_init(UDF_INIT* initid,
 #ifdef TRACE_CAPACITY
         cout([&]{
             std::string text("reserve: ");
-            text += btdef::to_text(arg_size);
+            text += std::to_string(arg_size);
             text += " need: ";
-            text += btdef::to_text(need_size);
+            text += std::to_string(need_size);
             return text;
         });
 #endif // TRACE_CAPACITY
@@ -134,12 +177,21 @@ extern "C" char* jsobj(UDF_INIT* initid, UDF_ARGS* args,
 
         j->start();
 
-        for (unsigned int i = 0; i < args->arg_count; ++i)
+#ifdef USE_COLUMN_NAME 
+        for (unsigned int i = 0, a = 0; i < args->arg_count; ++i, ++a)
         {
-            auto v = args->args[i];
+            auto v = args->args[a];
             auto key = args->attributes[i];
             auto key_size = args->attribute_lengths[i];
-            switch (args->arg_type[i])
+#else
+        // разбираем парами arg[0] = key, arg[1] = value и тд
+        for (unsigned int i = 0, a = 1; i < args->arg_count; i += 2, a += 2)
+        {
+            auto v = args->args[a];
+            auto key = args->args[i];
+            auto key_size = args->lengths[i];
+#endif
+            switch (args->arg_type[a])
             {
             case REAL_RESULT:
                 j->add(key, key_size, reinterpret_cast<double*>(v));
@@ -149,7 +201,7 @@ extern "C" char* jsobj(UDF_INIT* initid, UDF_ARGS* args,
                 break;
             case STRING_RESULT:
             case DECIMAL_RESULT:
-                j->add(key, key_size, v, args->lengths[i]);
+                j->add(key, key_size, v, args->lengths[a]);
                 break;
             default:;
             }
@@ -160,9 +212,9 @@ extern "C" char* jsobj(UDF_INIT* initid, UDF_ARGS* args,
 #ifdef TRACE_CAPACITY
         cout([&]{
             std::string text("size: ");
-            text += btdef::to_text(j->size());
+            text += std::to_string(j->size());
             text += " capacity: ";
-            text += btdef::to_text(j->capacity());
+            text += std::to_string(j->capacity());
             return text;
 
         });

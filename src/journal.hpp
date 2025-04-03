@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include <string>
 
 namespace captor {
 
@@ -42,7 +43,7 @@ private:
     void output(int level, const char *str) const noexcept;
 
     template<class T>
-    void output(int level, const T& text) const noexcept
+    void output(int level, const std::basic_string<T>& text) const noexcept
     {
         output(level, text.c_str());
     }

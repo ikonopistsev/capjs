@@ -11,10 +11,10 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
     {
         if (args->arg_count != 1)
         {
+            static const auto text = "jsd_init: arg_count != 1";
             strncpy(msg, "use jsd( <miliseconds> )", MYSQL_ERRMSG_SIZE);
-
             cout([&]{
-                return std::string("jsd_init: arg_count != 1");
+                return text;
             });
 
             return 1;
@@ -38,10 +38,8 @@ extern "C" my_bool jsd_init(UDF_INIT* initid,
     }
     catch (...)
     {
-        static const std::string text("jsd_init :*(");
-
-        strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
-
+        static const auto text = "jsd_init :*(";
+        strncpy(msg, text, MYSQL_ERRMSG_SIZE);
         cerr([&]{
             return text;
         });
@@ -104,11 +102,9 @@ extern "C" char* jsd(UDF_INIT*, UDF_ARGS *args,
     }
     catch (...)
     {
-        static const std::string text("jsd :*(");
-
+        static const auto text = "jsd :*(";
         *length = static_cast<unsigned long>(
-            snprintf(result, 255, "%s", text.c_str()));
-
+            snprintf(result, 255, "%s", text));
         cerr([&]{
             return text;
         });

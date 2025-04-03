@@ -72,9 +72,9 @@ extern "C" my_bool jsarr_init(UDF_INIT* initid,
 #ifdef TRACE_CAPACITY
         cout([&]{
             std::string text("reserve: ");
-            text += btdef::to_text(arg_size);
+            text += std::to_string(arg_size);
             text += " need: ";
-            text += btdef::to_text(need_size);
+            text += std::to_string(need_size);
             return text;
         });
 #endif // TRACE_CAPACITY
@@ -98,10 +98,8 @@ extern "C" my_bool jsarr_init(UDF_INIT* initid,
     }
     catch (...)
     {
-        static const std::string text("jsarr_init :*(");
-
-        strncpy(msg, text.c_str(), MYSQL_ERRMSG_SIZE);
-
+        static const auto text = "jsarr_init :*(";
+        strncpy(msg, text, MYSQL_ERRMSG_SIZE);
         cerr([&]{
             return text;
         });
@@ -146,9 +144,9 @@ extern "C" char* jsarr(UDF_INIT* initid, UDF_ARGS* args,
 #ifdef TRACE_CAPACITY
         cout([&]{
             std::string text("size: ");
-            text += btdef::to_text(j->size());
+            text += std::to_string(j->size());
             text += " capacity: ";
-            text += btdef::to_text(j->capacity());
+            text += std::to_string(j->capacity());
             return text;
         });
 #endif // TRACE_CAPACITY
@@ -169,11 +167,9 @@ extern "C" char* jsarr(UDF_INIT* initid, UDF_ARGS* args,
     }
     catch (...)
     {
-        static const std::string text("jsarr :*(");
-
+        static const auto text = "jsarr :*(";
         *length = static_cast<unsigned long>(
-            snprintf(result, 255, "%s", text.c_str()));
-
+            snprintf(result, 255, "%s", text));
         cerr([&]{
             return text;
         });

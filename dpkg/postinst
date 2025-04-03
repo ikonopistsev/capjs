@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+CAPJS_NAME="libcapjs.so"
+CAPJS_PATH="/usr/lib/capjs/$CAPJS_NAME"
+
+for DB_TYPE in "mariadb" "mysql"
+do
+    for PLUGIN_DIR in "plugin" "plugins"
+    do
+        DB_DIRECTORY="/usr/lib/$DB_TYPE/$PLUGIN_DIR"
+        if [ -d $DB_DIRECTORY ]; then
+            ln -vsf $CAPJS_PATH "$DB_DIRECTORY/$CAPJS_NAME"
+        fi
+    done
+done
+
+exit 0
